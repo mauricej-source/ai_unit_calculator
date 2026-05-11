@@ -1,0 +1,28 @@
+For this app, I’d deploy to Render first.
+
+Reason: your project is currently a Vite React frontend plus a real Express backend in server.mjs. 
+        Render supports a normal persistent Node/Express web service directly, so it should require the least refactor. 
+		Vercel or Netlify can work, but they would push us toward serverless/API-function restructuring.
+
+Recommended path:
+  1.  Push the project to GitHub.
+  2.  Create a Render Web Service from the repo.
+  3.  Use:
+		Build command: npm install && npm run build
+		Start command: npm run preview
+  4.  Set environment variables in Render:
+		PAYPAL_MODE=live
+		PAYPAL_CLIENT_ID=...
+		PAYPAL_CLIENT_SECRET=...
+		ENABLE_DEV_MOCK_PAYMENTS=false
+		ADMIN_PASSWORD=...
+		AUTH_SECRET=...
+		any pricing API keys/config values
+  5.  Point https://aiunitcalculator.com to the Render service.
+
+Sources: Render documents Node/Express web services directly, while Vercel and Netlify support Express through serverless/function patterns that would need more adaptation:
+  Render Node Express deployment
+  Vercel Express guide
+  Netlify Functions deployment
+
+My recommendation: Render now, then consider Vercel/Netlify later only if you want to refactor the backend into platform functions.

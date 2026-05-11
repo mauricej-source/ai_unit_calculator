@@ -1,0 +1,33 @@
+### TASK: Develop "AI Unit Economics Architect" - A Strategic TCO Web Application
+
+### CORE ARCHITECTURE:
+Build a Single-Page Application using React, TypeScript, and Tailwind CSS. The app must calculate the Total Cost of Ownership (TCO) for AI infrastructure, comparing Cloud GPU rentals, Hardware Ownership, and Public API consumption.
+
+### FUNCTIONAL MODULES:
+1. **GPU Infrastructure Engine:** 
+   - Inputs: GPU Model, Hourly Rental Rate, Hardware Purchase Price, Daily Utilization (0-24 hrs), Project Term (Months).
+   - Math: Calculate "Breakeven Day" (Purchase Price / (Hourly Rate * Daily Hours)). Include a 15% TCO buffer for electricity/cooling on the ownership side.
+2. **Public API Engine:**
+   - Inputs: Model Selection (GPT-5, Claude 4, DeepSeek V3), Avg Input/Output Tokens per Request, Daily Request Volume.
+   - Math: Calculate monthly burn rate with "Prompt Caching" logic (apply a 50% discount to input tokens to simulate repeat context).
+3. **Crossover Visualization:**
+   - Use Chart.js to render a line graph showing cumulative costs of all three paths (Rental vs. Buy vs. API) over the project timeline.
+
+### PAYPAL & TIERED MONETIZATION:
+- **State Logic:** Initialize `unlockedTier` at 0. 
+- **Tier 1 ($5.00):** Trigger 'onApprove' for $5.00 to set `unlockedTier = 1`. This enables the "GPU Executive PDF" button.
+- **Tier 2 ($10.00):** Trigger 'onApprove' for $10.00 to set `unlockedTier = 2`. This enables the "Full Strategic Roadmap PDF" (Comparison Mode).
+
+### PDF EXPORT SPECIFICATION (jspdf + html2canvas):
+- Create a `generatePDF()` function that captures a hidden, high-fidelity report template.
+- Tier 1 Report: Focuses on the Infrastructure Breakeven Analysis.
+- Tier 2 Report: Side-by-side comparison of API vs. Self-Hosted Infrastructure, including a "Scalability Verdict" based on token volume.
+
+### MARKET DATA (Configurable):
+const MARKET_DATA = {
+  gpus: [{ model: "H100", buy: 25000, rent: 3.00 }, { model: "B200", buy: 35000, rent: 6.50 }],
+  apis: [{ model: "GPT-5", input: 2.50, output: 15.00 }, { model: "Llama-4-70B (Cloud)", input: 0.60, output: 0.90 }]
+};
+
+### UI DESIGN:
+Use a professional "Dark Mode" dashboard aesthetic. Place the PayPal buttons prominently next to the "Report Export" section.

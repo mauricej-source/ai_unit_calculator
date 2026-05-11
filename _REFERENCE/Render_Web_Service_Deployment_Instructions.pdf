@@ -1,0 +1,661 @@
+%PDF-1.3
+%ºß¬à
+3 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 612. 792.]
+/Contents 4 0 R
+>>
+endobj
+4 0 obj
+<<
+/Length 4902
+>>
+stream
+0.200025 w
+0 G
+BT
+/F2 20 Tf
+23. TL
+0.082 0.09 0.075 rg
+54. 736. Td
+(AI Unit Calculator: Render Deployment Instructions) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+54. 706. Td
+(Use this checklist to deploy the AI Unit Calculator as a public Render Web Service. This is the recommended) Tj
+T* (first production host because the project already uses a Vite React frontend and an Express backend in) Tj
+T* (server.mjs.) Tj
+ET
+BT
+/F2 13 Tf
+14.9499999999999993 TL
+0.118 0.192 0.247 rg
+54. 644. Td
+(Before You Start) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+54. 626. Td
+(•) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+72. 626. Td
+(Create or confirm a GitHub repository for the project. Render deploys from a linked GitHub, GitLab,) Tj
+T* (Bitbucket, or public Git repository.) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+54. 592. Td
+(•) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+72. 592. Td
+(Make sure .env is not committed. Production secrets should be entered in Render, not stored in GitHub.) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+54. 572. Td
+(•) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+72. 572. Td
+(Use live PayPal credentials only when you are ready for real transactions. Keep sandbox credentials for) Tj
+T* (local testing.) Tj
+ET
+BT
+/F2 13 Tf
+14.9499999999999993 TL
+0.118 0.192 0.247 rg
+54. 526. Td
+(Create The Render Web Service) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+54. 508. Td
+(•) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+72. 508. Td
+(Open https://dashboard.render.com/ and sign in.) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+54. 488. Td
+(•) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+72. 488. Td
+(Click New, then choose Web Service.) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+54. 468. Td
+(•) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+72. 468. Td
+(Choose Git Provider and connect GitHub if prompted.) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+54. 448. Td
+(•) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+72. 448. Td
+(Select the AI Unit Calculator repository.) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+54. 428. Td
+(•) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+72. 428. Td
+(Complete the service form with the settings below.) Tj
+ET
+0.97 0.95 0.89 rg
+0.65 0.68 0.66 RG
+59. 418. m
+553. 418. l
+555.7614237491540052 418. 558. 415.7614237491539484 558. 413. c
+558. 340. l
+558. 337.2385762508460516 555.2385762508459948 335. 553. 335. c
+59. 335. l
+56.2385762508460303 335. 54. 337.7614237491539484 54. 340. c
+54. 413. l
+54. 415.7614237491539484 56.7614237491539697 418. 59. 418. c
+h
+B
+BT
+/F5 9.5 Tf
+10.9249999999999989 TL
+0. g
+66. 402. Td
+(Name: ai-unit-calculator) Tj
+T* (Language: Node) Tj
+T* (Branch: main) Tj
+T* (Build Command: npm install && npm run build) Tj
+T* (Start Command: npm run preview) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+54. 315. Td
+(•) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+72. 315. Td
+(Choose a region near your expected users.) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+54. 295. Td
+(•) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+72. 295. Td
+(Choose an instance type. Start small and upgrade later if traffic requires it.) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+54. 275. Td
+(•) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+72. 275. Td
+(Open Advanced and add the environment variables listed below.) Tj
+ET
+BT
+/F2 13 Tf
+14.9499999999999993 TL
+0.118 0.192 0.247 rg
+54. 243. Td
+(Production Environment Variables) Tj
+ET
+0.97 0.95 0.89 rg
+0.65 0.68 0.66 RG
+59. 235. m
+553. 235. l
+555.7614237491540052 235. 558. 232.7614237491540052 558. 230. c
+558. 118. l
+558. 115.2385762508459948 555.2385762508459948 113. 553. 113. c
+59. 113. l
+56.2385762508460303 113. 54. 115.7614237491540052 54. 118. c
+54. 230. l
+54. 232.7614237491540052 56.7614237491539697 235. 59. 235. c
+h
+B
+BT
+/F5 9.5 Tf
+10.9249999999999989 TL
+0. g
+66. 219. Td
+(PAYPAL_MODE=live) Tj
+T* (PAYPAL_CLIENT_ID=your_live_paypal_client_id) Tj
+T* (PAYPAL_CLIENT_SECRET=your_live_paypal_secret) Tj
+T* (ENABLE_DEV_MOCK_PAYMENTS=false) Tj
+T* (ADMIN_PASSWORD=your_admin_password) Tj
+T* (AUTH_SECRET=a_long_random_secret_value) Tj
+T* (API_PORT=10000) Tj
+T* (WEB_PORT=10000) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+54. 93. Td
+(If you are using the GCP pricing refresh feature, also add the GCP billing API key and any other pricing) Tj
+T* (source overrides you need.) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.38 0.459 0.518 rg
+54. 28. Td
+(AI Unit Calculator deployment notes - generated May 2026) Tj
+ET
+endstream
+endobj
+5 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 612. 792.]
+/Contents 6 0 R
+>>
+endobj
+6 0 obj
+<<
+/Length 2828
+>>
+stream
+0.200025 w
+0.65 0.68 0.66 RG
+0.97 0.95 0.89 rg
+0.65 0.68 0.66 RG
+59. 746. m
+553. 746. l
+555.7614237491540052 746. 558. 743.7614237491540052 558. 741. c
+558. 720. l
+558. 717.2385762508459948 555.2385762508459948 715. 553. 715. c
+59. 715. l
+56.2385762508460303 715. 54. 717.7614237491540052 54. 720. c
+54. 741. l
+54. 743.7614237491540052 56.7614237491539697 746. 59. 746. c
+h
+B
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.38 0.459 0.518 rg
+66. 730. Td
+(GCP_BILLING_API_KEY=your_key_if_using_gcp_refresh) Tj
+ET
+BT
+/F2 13 Tf
+14.9499999999999993 TL
+0.118 0.192 0.247 rg
+54. 683. Td
+(Deploy And Test) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+54. 665. Td
+(•) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+72. 665. Td
+(Click Create Web Service. Render will build and deploy the app.) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+54. 645. Td
+(•) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+72. 645. Td
+(When deploy completes, Render will provide a temporary URL similar to) Tj
+T* (https://ai-unit-calculator.onrender.com.) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+54. 611. Td
+(•) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+72. 611. Td
+(Open that URL and verify the home page loads.) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+54. 591. Td
+(•) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+72. 591. Td
+(Go to /admin and verify the admin password works.) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+54. 571. Td
+(•) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+72. 571. Td
+(Check the PayPal configuration panel and confirm live mode, server verification configured, and dev) Tj
+T* (mock payments disabled.) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+54. 537. Td
+(•) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+72. 537. Td
+(Perform a careful low-dollar live transaction only when you are ready to confirm real payments.) Tj
+ET
+BT
+/F2 13 Tf
+14.9499999999999993 TL
+0.118 0.192 0.247 rg
+54. 505. Td
+(Custom Domain) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+54. 487. Td
+(After the Render URL works, add your custom domain aiunitcalculator.ai in Render. Render will provide DNS) Tj
+T* (records to add at your domain registrar. Wait for DNS and HTTPS provisioning to complete, then test the) Tj
+T* (custom domain.) Tj
+ET
+BT
+/F2 13 Tf
+14.9499999999999993 TL
+0.118 0.192 0.247 rg
+54. 425. Td
+(Reference) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.082 0.09 0.075 rg
+54. 407. Td
+(Render Web Services documentation: https://render.com/docs/web-services) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.38 0.459 0.518 rg
+54. 28. Td
+(AI Unit Calculator deployment notes - generated May 2026) Tj
+ET
+endstream
+endobj
+1 0 obj
+<</Type /Pages
+/Kids [3 0 R 5 0 R ]
+/Count 2
+>>
+endobj
+7 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+8 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+9 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+10 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+11 0 obj
+<<
+/Type /Font
+/BaseFont /Courier
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+12 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+13 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+14 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+15 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Roman
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+16 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+17 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Italic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+18 0 obj
+<<
+/Type /Font
+/BaseFont /Times-BoldItalic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+19 0 obj
+<<
+/Type /Font
+/BaseFont /ZapfDingbats
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+20 0 obj
+<<
+/Type /Font
+/BaseFont /Symbol
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+2 0 obj
+<<
+/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
+/Font <<
+/F1 7 0 R
+/F2 8 0 R
+/F3 9 0 R
+/F4 10 0 R
+/F5 11 0 R
+/F6 12 0 R
+/F7 13 0 R
+/F8 14 0 R
+/F9 15 0 R
+/F10 16 0 R
+/F11 17 0 R
+/F12 18 0 R
+/F13 19 0 R
+/F14 20 0 R
+>>
+/XObject <<
+>>
+>>
+endobj
+21 0 obj
+<<
+/Producer (jsPDF 4.2.1)
+/CreationDate (D:20260510100232-04'00')
+>>
+endobj
+22 0 obj
+<<
+/Type /Catalog
+/Pages 1 0 R
+/OpenAction [3 0 R /FitH null]
+/PageLayout /OneColumn
+>>
+endobj
+xref
+0 23
+0000000000 65535 f 
+0000008059 00000 n 
+0000009884 00000 n 
+0000000015 00000 n 
+0000000120 00000 n 
+0000005074 00000 n 
+0000005179 00000 n 
+0000008122 00000 n 
+0000008247 00000 n 
+0000008377 00000 n 
+0000008510 00000 n 
+0000008648 00000 n 
+0000008772 00000 n 
+0000008901 00000 n 
+0000009033 00000 n 
+0000009169 00000 n 
+0000009297 00000 n 
+0000009424 00000 n 
+0000009553 00000 n 
+0000009686 00000 n 
+0000009788 00000 n 
+0000010134 00000 n 
+0000010220 00000 n 
+trailer
+<<
+/Size 23
+/Root 22 0 R
+/Info 21 0 R
+/ID [ <6DDC8564169D68B9D094F1F24DBC6F07> <6DDC8564169D68B9D094F1F24DBC6F07> ]
+>>
+startxref
+10324
+%%EOF
