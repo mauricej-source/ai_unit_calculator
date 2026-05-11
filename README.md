@@ -150,6 +150,7 @@ GCP_REGION=us-central1
 GCP_BILLING_API_KEY=
 ENABLE_DEV_MOCK_PAYMENTS=true
 API_PORT=5177
+API_HOST=127.0.0.1
 WEB_PORT=5176
 ```
 
@@ -171,9 +172,10 @@ PAYPAL_CLIENT_SECRET=your_live_paypal_secret
 ENABLE_DEV_MOCK_PAYMENTS=false
 ADMIN_PASSWORD=your_admin_password
 AUTH_SECRET=a_long_random_secret_value
-API_PORT=10000
-WEB_PORT=10000
+PORT=10000
 ```
+
+Render provides the public listen port through `PORT`. When `PORT` is set, the server binds to `0.0.0.0` so Render can route public HTTP traffic to the service. Keep `API_PORT` and `API_HOST` for local development only.
 
 ## Reference Materials Required to Understand the Project
 

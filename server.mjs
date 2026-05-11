@@ -8,7 +8,8 @@ import express from "express";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 const canonicalOrigin = "https://aiunitcalculator.com";
-const apiPort = Number(process.env.API_PORT ?? 5177);
+const apiPort = Number(process.env.PORT ?? process.env.API_PORT ?? 5177);
+const apiHost = process.env.PORT ? "0.0.0.0" : (process.env.API_HOST ?? "127.0.0.1");
 const webPort = Number(process.env.WEB_PORT ?? 5176);
 const authSecret = process.env.AUTH_SECRET ?? "local-dev-auth-secret-change-before-production";
 const adminPassword = process.env.ADMIN_PASSWORD ?? "change-me-admin";
@@ -883,6 +884,6 @@ app.use(async (_request, response) => {
   }
 });
 
-app.listen(apiPort, "127.0.0.1", () => {
-  console.log(`API server listening on http://127.0.0.1:${apiPort}`);
+app.listen(apiPort, apiHost, () => {
+  console.log(`API server listening on http://${apiHost}:${apiPort}`);
 });
