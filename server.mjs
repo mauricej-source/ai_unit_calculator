@@ -1,9 +1,14 @@
 import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { Readable } from "node:stream";
 import { fileURLToPath } from "node:url";
 import "dotenv/config";
 import express from "express";
+import { chain } from "stream-chain";
+import { parser } from "stream-json";
+import { pick } from "stream-json/filters/pick.js";
+import { streamObject } from "stream-json/streamers/stream-object.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -26,6 +31,8 @@ const azureRetailRegion = process.env.AZURE_RETAIL_REGION ?? "eastus";
 const awsEc2PricingUrl =
   process.env.AWS_EC2_PRICING_URL ?? "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/us-east-1/index.json";
 const awsRegionLabel = process.env.AWS_REGION_LABEL ?? "US East (N. Virginia)";
+const enableAwsPriceRefresh = process.env.ENABLE_AWS_PRICE_REFRESH !== "false";
+const awsPricingFetchTimeoutMs = Number(process.env.AWS_PRICING_FETCH_TIMEOUT_MS ?? 120000);
 const gcpBillingCatalogUrl = process.env.GCP_BILLING_CATALOG_URL ?? "https://cloudbilling.googleapis.com/v1/services/6F81-5844-456A/skus";
 const gcpRegion = process.env.GCP_REGION ?? "us-central1";
 const baseTierAmounts = {
@@ -479,22 +486,19 @@ async function fetchAzureGpuOffers(currentGpus) {
   };
 }
 
-function pickAwsProducts(products, instanceType) {
-  return Object.values(products).filter((product) => {
-    const attributes = product.attributes ?? {};
-    return (
-      attributes.instanceType === instanceType &&
-      attributes.operatingSystem === "Linux" &&
-      attributes.tenancy === "Shared" &&
-      attributes.preInstalledSw === "NA" &&
-      attributes.capacitystatus === "Used" &&
-      String(attributes.operation ?? "").startsWith("RunInstances")
-    );
-  });
+function isAwsLinuxOnDemandProduct(product, instanceTypes) {
+  const attributes = product.attributes ?? {};
+  return (
+    instanceTypes.has(attributes.instanceType) &&
+    attributes.operatingSystem === "Linux" &&
+    attributes.tenancy === "Shared" &&
+    attributes.preInstalledSw === "NA" &&
+    attributes.capacitystatus === "Used" &&
+    String(attributes.operation ?? "").startsWith("RunInstances")
+  );
 }
 
-function pickAwsHourlyPrice(terms, sku) {
-  const skuTerms = terms?.OnDemand?.[sku] ?? {};
+function pickAwsHourlyPriceFromSkuTerms(skuTerms) {
   for (const term of Object.values(skuTerms)) {
     for (const dimension of Object.values(term.priceDimensions ?? {})) {
       const price = Number(dimension.pricePerUnit?.USD);
@@ -504,9 +508,82 @@ function pickAwsHourlyPrice(terms, sku) {
   return null;
 }
 
+async function streamAwsPricingEntries(onEntry) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), awsPricingFetchTimeoutMs);
+  try {
+    const sourceResponse = await fetch(awsEc2PricingUrl, {
+      headers: { Accept: "application/json" },
+      signal: controller.signal,
+    });
+    if (!sourceResponse.ok) {
+      throw new Error(`AWS EC2 pricing source returned ${sourceResponse.status}.`);
+    }
+
+    const awsStream = chain([
+      Readable.fromWeb(sourceResponse.body),
+      parser(),
+      pick({ filter: /^(products|terms\.OnDemand)$/ }),
+      streamObject(),
+    ]);
+
+    for await (const { key, value } of awsStream) {
+      await onEntry(key, value);
+    }
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+async function loadAwsPricingExtract() {
+  if (awsPricingCache && awsPricingCache.url === awsEc2PricingUrl && awsPricingCache.expires > Date.now()) {
+    return awsPricingCache;
+  }
+
+  const instanceTypes = new Set(Object.values(awsGpuMappings).map((mapping) => mapping.instanceType));
+  const skuToInstanceType = new Map();
+  const hourlyByInstanceType = new Map();
+
+  await streamAwsPricingEntries((sku, value) => {
+    if (value?.attributes) {
+      if (isAwsLinuxOnDemandProduct(value, instanceTypes)) {
+        skuToInstanceType.set(sku, value.attributes.instanceType);
+      }
+      return;
+    }
+
+    const instanceType = skuToInstanceType.get(sku);
+    if (!instanceType) return;
+
+    const hourlyPrice = pickAwsHourlyPriceFromSkuTerms(value);
+    if (!Number.isFinite(hourlyPrice) || hourlyPrice <= 0) return;
+
+    const current = hourlyByInstanceType.get(instanceType);
+    if (!Number.isFinite(current) || hourlyPrice < current) {
+      hourlyByInstanceType.set(instanceType, hourlyPrice);
+    }
+  });
+
+  awsPricingCache = {
+    url: awsEc2PricingUrl,
+    hourlyByInstanceType,
+    matchedSkus: skuToInstanceType.size,
+    expires: Date.now() + 1000 * 60 * 60,
+  };
+  return awsPricingCache;
+}
+
 async function fetchAwsGpuOffers(currentGpus) {
   const notes = [];
   const offers = [];
+  if (!enableAwsPriceRefresh) {
+    return {
+      offers,
+      notes: ["AWS unchanged: EC2 bulk price refresh is disabled. Set ENABLE_AWS_PRICE_REFRESH=true to enable it in an environment with enough memory/time for the AWS bulk pricing file."],
+      source: { label: `AWS EC2 Price List (${awsRegionLabel})`, url: awsEc2PricingUrl, updated: 0, total: currentGpus.length },
+    };
+  }
+
   const mappedGpus = currentGpus.filter((gpu) => awsGpuMappings[gpu.id]);
   if (!mappedGpus.length) {
     return {
@@ -517,14 +594,7 @@ async function fetchAwsGpuOffers(currentGpus) {
   }
 
   try {
-    if (!awsPricingCache || awsPricingCache.url !== awsEc2PricingUrl || awsPricingCache.expires < Date.now()) {
-      const sourceResponse = await fetch(awsEc2PricingUrl, { headers: { Accept: "application/json" } });
-      if (!sourceResponse.ok) {
-        throw new Error(`AWS EC2 pricing source returned ${sourceResponse.status}.`);
-      }
-      awsPricingCache = { url: awsEc2PricingUrl, body: await sourceResponse.json(), expires: Date.now() + 1000 * 60 * 60 };
-    }
-    const body = awsPricingCache.body;
+    const pricing = await loadAwsPricingExtract();
     let updated = 0;
 
     for (const gpu of currentGpus) {
@@ -533,8 +603,7 @@ async function fetchAwsGpuOffers(currentGpus) {
         notes.push(`GPU unchanged: ${gpu.model} has no AWS instance mapping yet.`);
         continue;
       }
-      const products = pickAwsProducts(body.products ?? {}, mapping.instanceType);
-      const hourlyPrice = products.map((product) => pickAwsHourlyPrice(body.terms, product.sku)).find((price) => Number.isFinite(price) && price > 0) ?? null;
+      const hourlyPrice = pricing.hourlyByInstanceType.get(mapping.instanceType) ?? null;
       if (!hourlyPrice) {
         notes.push(`GPU unchanged: ${gpu.model} AWS lookup found no Linux on-demand price for ${mapping.instanceType}.`);
         continue;
@@ -546,7 +615,7 @@ async function fetchAwsGpuOffers(currentGpus) {
 
     return {
       offers,
-      notes,
+      notes: [`AWS pricing stream matched ${pricing.matchedSkus} Linux on-demand SKUs.`, ...notes],
       source: { label: `AWS EC2 Price List (${awsRegionLabel})`, url: awsEc2PricingUrl, updated, total: currentGpus.length },
     };
   } catch (error) {

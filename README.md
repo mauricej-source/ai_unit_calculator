@@ -145,6 +145,8 @@ AZURE_RETAIL_PRICES_URL=https://prices.azure.com/api/retail/prices
 AZURE_RETAIL_REGION=eastus
 AWS_EC2_PRICING_URL=https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/us-east-1/index.json
 AWS_REGION_LABEL=US East (N. Virginia)
+ENABLE_AWS_PRICE_REFRESH=true
+AWS_PRICING_FETCH_TIMEOUT_MS=120000
 GCP_BILLING_CATALOG_URL=https://cloudbilling.googleapis.com/v1/services/6F81-5844-456A/skus
 GCP_REGION=us-central1
 GCP_BILLING_API_KEY=
@@ -207,6 +209,7 @@ Fresh data behavior:
 - Nothing is saved until `Apply Reviewed Data` is clicked.
 - GPU cloud prices require explicit SKU mapping because cloud vendors report VM or accelerator SKUs rather than generic GPU model prices.
 - Azure and AWS are available without local credentials.
+- AWS EC2 pricing is parsed as a stream and only the mapped instance prices are cached, so refreshes do not load the full AWS bulk pricing catalog into memory.
 - GCP requires `GCP_BILLING_API_KEY`; without it, GCP appears in the Admin refresh sources with `updated: 0`.
 - Hardware purchase prices remain admin-reviewed.
 - When multiple cloud providers return prices for the same GPU, the guarded refresh chooses the lowest available on-demand benchmark and the lowest available spot benchmark, then lists the provider choice in the review notes.
